@@ -1,0 +1,55 @@
+<p-dialog [(visible)]="visible" [dismissableMask]="true" [draggable]="false" [modal]="true" [resizable]="false"
+          [style]="{ width: '50vw' }" header="{{title}}">
+  <app-manage-competition
+    (cancel)="cancel()"
+    (submit)="save($event)"
+    [competition]="competition"
+  ></app-manage-competition>
+</p-dialog>
+<p-toast></p-toast>
+<p-confirmDialog [dismissableMask]="true"
+                 [style]="{width: '45vw'}"
+                 acceptButtonStyleClass="p-button-danger"
+                 acceptIcon="pi pi-trash"
+                 acceptLabel="Delete"
+                 rejectLabel="Cancel"></p-confirmDialog>
+<div
+  class="px-5 surface-0 border-bottom-1 surface-border relative static"
+  style="height: 60px;">
+  <div class="flex justify-content-between align-items-center">
+    <div>
+      <p-button (click)="createCompetition()" icon="pi pi-plus" label="Add Competition" size="small"
+                styleClass="p-button-success"></p-button>
+    </div>
+    <p-selectButton styleClass="mt-1" (onChange)="filterChanged()" [(ngModel)]="filter" [options]="filterOptions" optionLabel="name"
+                    optionValue="value"></p-selectButton>
+  </div>
+</div>
+<div *ngIf="length === 0" class="flex justify-content-center align-items-center h-full">
+  <h3 class="text-900 text-blue-300">There Is no Competition </h3>
+</div>
+<div class="block-content">
+  <div class="p-5 surface-ground">
+    <div class="surface-ground">
+      <div class="grid">
+        <app-competition-card
+          (delete)="deleteCompetition($event)"
+          (update)="updateCompetition($event)"
+          *ngFor="let competition of competitions"
+          [competition]="competition"
+        ></app-competition-card>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <p-paginator (onPageChange)="onPageChange($event)"
+                 [first]="first"
+                 [rowsPerPageOptions]="[4, 8, 16]"
+                 [rows]="rows"
+                 [showCurrentPageReport]="true"
+                 [totalRecords]="length"
+                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    ></p-paginator>
+  </div>
+</div>
+
